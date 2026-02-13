@@ -16,6 +16,8 @@ class HttpResponse {
 		HttpResponse(std::string _url, std::string _host_header, std::string _body, int _code);
 		std::string generate_key();
 		std::string get_key();
+		std::string get_body();
+		int get_code();
 		bool is_valid();
 };
 

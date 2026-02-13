@@ -22,6 +22,16 @@ string HttpResponse::get_key()
 	return this->key;
 }
 
+string HttpResponse::get_body()
+{
+	return this->body;
+}
+
+int HttpResponse::get_code()
+{
+	return this->code;
+}
+
 bool HttpResponse::is_valid()
 {
 	return !this->key.empty();

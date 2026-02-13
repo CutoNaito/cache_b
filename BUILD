@@ -1,6 +1,6 @@
 load(
     "//bazel:envoy_build_system.bzl",
-    "envoy_cc_extension",
+    "envoy_cc_library",
     "envoy_extension_package",
 )
 
@@ -10,11 +10,21 @@ licenses(["notice"])  # Apache 2
 
 envoy_extension_package()
 
-envoy_cc_extension(
-    name = "config",
-    srcs = ["cachefilter.cc"],
-    hdrs = ["cachefilter.h"],
+envoy_cc_library(
+    name = "cache_b",
+    srcs = [
+		"cachefilter.cc",
+		"cachefilter_factory.cc",
+	],
+    hdrs = [
+		"cachefilter.h",
+		"cachefilter_factory.h",
+	],
     deps = [
-		"//include/envoy/http:filter_interface"
+		"//envoy/http:filter_interface",
+		"//envoy/server:filter_config_interface",
+		"//envoy/registry",
+		"//source/common/protobuf",
+		"//external:protobuf",
     ],
 )
