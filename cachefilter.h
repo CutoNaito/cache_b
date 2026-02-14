@@ -12,9 +12,12 @@ namespace Extensions {
 namespace HttpFilters {
 namespace Cache_B {
 
-class CacheFilter : public Http::StreamDecoderFilter, public Http::StreamEncoderFilter {
+class CacheFilter : public Http::StreamFilter {
 	private:
 		CacheResponse& cache_;
+		bool should_cache_{false};
+		std::string response_body_;
+		int response_code_{0};
 
 		Http::StreamDecoderFilterCallbacks* decoder_callbacks_{};
 		Http::StreamEncoderFilterCallbacks* encoder_callbacks_{};
@@ -36,6 +39,14 @@ class CacheFilter : public Http::StreamDecoderFilter, public Http::StreamEncoder
 		void setEncoderFilterCallbacks(Http::StreamEncoderFilterCallbacks& callbacks) override;
 
 		void onDestroy() override {};
+
+		Http::Filter1xxHeadersStatus encode1xxHeaders(Http::ResponseHeaderMap&) override {
+			return Http::Filter1xxHeadersStatus::Continue;
+		}
+
+		Http::FilterMetadataStatus encodeMetadata(Http::MetadataMap&) override {
+			return Http::FilterMetadataStatus::Continue;
+		}
 };
 }
 }

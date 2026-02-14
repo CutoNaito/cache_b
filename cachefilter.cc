@@ -9,7 +9,7 @@ namespace Cache_B {
 
 CacheFilter::CacheFilter(CacheResponse& cache) : cache_(cache) {}
 
-Http::FilterHeaderStatus CacheFilter::decodeHeaders(Http::RequestHeaderMap& headers, bool)
+Http::FilterHeadersStatus CacheFilter::decodeHeaders(Http::RequestHeaderMap& headers, bool)
 {
 	auto host = headers.getHostValue();
 	auto path = headers.getPathValue();
@@ -29,15 +29,15 @@ Http::FilterHeaderStatus CacheFilter::decodeHeaders(Http::RequestHeaderMap& head
 		return Http::FilterHeadersStatus::StopIteration;
 	}
 
-	return Http::FilterHeaderStatus::Continue;
+	return Http::FilterHeadersStatus::Continue;
 }
 
-Http::FilterHeaderStatus CacheFilter::encodeHeaders(Http::ResponseHeaderMap& headers, bool)
+Http::FilterHeadersStatus CacheFilter::encodeHeaders(Http::ResponseHeaderMap& headers, bool)
 {
 	auto status = headers.getStatusValue();
 
 	if (status != "200") {
-		return Http::FilterHeaderStatus::Continue;
+		return Http::FilterHeadersStatus::Continue;
 	}
 
 	std::string body = "";
@@ -51,7 +51,7 @@ Http::FilterHeaderStatus CacheFilter::encodeHeaders(Http::ResponseHeaderMap& hea
 
 	cache_.insert(std::move(response));
 
-	return Http::FilterHeaderStatus::Continue;
+	return Http::FilterHeadersStatus::Continue;
 }
 
 void CacheFilter::setDecoderFilterCallbacks(Http::StreamDecoderFilterCallbacks& callbacks)
@@ -64,7 +64,7 @@ void CacheFilter::setEncoderFilterCallbacks(Http::StreamEncoderFilterCallbacks& 
 	encoder_callbacks_ = &callbacks;
 }
 
-Http::FilterDataStatus CacheFilter::decodeData(Buffer::Instance& bool)
+Http::FilterDataStatus CacheFilter::decodeData(Buffer::Instance&, bool)
 {
 	return Http::FilterDataStatus::Continue;
 }

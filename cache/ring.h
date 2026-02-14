@@ -3,8 +3,7 @@
 
 #include <string>
 #include <vector>
-
-class HttpResponse;
+#include "httpresponse.h"
 
 class RingBuffer {
 	private:

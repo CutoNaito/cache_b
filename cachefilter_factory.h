@@ -7,6 +7,9 @@
 #include "envoy/http/filter.h"
 #include "cachefilter.h"
 #include "cache/cacheresponse.h"
+#include "envoy/config/core/v3/base.pb.h"
+#include "google/protobuf/empty.pb.h"
+#include "cachefilter.pb.h"
 
 namespace Envoy {
 namespace Extensions {
@@ -15,9 +18,9 @@ namespace Cache_B {
 
 class CacheFilterFactory : public Server::Configuration::NamedHttpFilterConfigFactory {
 	public:
-		Http::FilterFactoryCb createFilterFactoryFromPhoto(const Protobuf::Message& proto_config, const std::string&, FactoryContext& context) override;
-		ProtobufTypes::MessagePtr createEmptyConfigPhoto() override {
-			return std::make_unique<ProtobufWkt::Empty>();
+		absl::StatusOr<Http::FilterFactoryCb> createFilterFactoryFromProto(const Protobuf::Message& proto_config, const std::string&, Server::Configuration::FactoryContext& context) override;
+		ProtobufTypes::MessagePtr createEmptyConfigProto() override {
+			return std::make_unique<google::protobuf::Empty>();
 		};
 
 		std::string name() const override {

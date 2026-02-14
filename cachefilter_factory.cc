@@ -8,17 +8,17 @@ namespace Extensions {
 namespace HttpFilters {
 namespace Cache_B {
 
-Http::FilterFactoryCb CacheFilterFactory::createFilterFactoryFromPhoto(Protobuf::Message&, std::string&, Server::Configuration::FactoryContext&)
+	absl::StatusOr<Http::FilterFactoryCb> CacheFilterFactory::createFilterFactoryFromProto(const Protobuf::Message&, const std::string&, Server::Configuration::FactoryContext&)
 {
 	static CacheResponse cache(128);
 
-	return [&cache](Http::FilterChainFactoryCallbacks& callbacks) -> void {
+	return [](Http::FilterChainFactoryCallbacks& callbacks) {
 		auto filter = std::make_shared<CacheFilter>(cache);
 		callbacks.addStreamFilter(filter);
-	}
+	};
 }
 
-REGISTER_FACTORY(CacheFilterFactory, Server::Configuration::NamedHttpFilterConfigFactory);
+static Registry::RegisterFactory<CacheFilterFactory, Server::Configuration::NamedHttpFilterConfigFactory> registered_;
 
 }
 }

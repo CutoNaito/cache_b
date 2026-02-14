@@ -1,30 +1,44 @@
 load(
-    "//bazel:envoy_build_system.bzl",
-    "envoy_cc_library",
-    "envoy_extension_package",
+	"//bazel:envoy_build_system.bzl",
+	"envoy_cc_extension",
+	"envoy_extension_package",
 )
 
 licenses(["notice"])  # Apache 2
 
-## WIP: Simple in-memory cache storage plugin. Not ready for deployment.
-
+# Needed to generate config_envoy_extension target
 envoy_extension_package()
 
-envoy_cc_library(
-    name = "cache_b",
-    srcs = [
+proto_library(
+    name = "cachefilter_proto",
+    srcs = ["cachefilter.proto"],
+)
+
+cc_proto_library(
+	name = "cachefilter_cc",
+	deps = [":cachefilter_proto"],
+)
+
+# All filter code goes inside envoy_cc_extension
+envoy_cc_extension(
+	name = "config",
+	srcs = glob([
 		"cachefilter.cc",
 		"cachefilter_factory.cc",
-	],
-    hdrs = [
+		"cache/**/*.cpp",
+	]),
+	hdrs = glob([
 		"cachefilter.h",
 		"cachefilter_factory.h",
+		"cache/**/*.h",
+	]),
+	deps = [
+    "//envoy/http:filter_interface",
+    "//envoy/server:filter_config_interface",
+    "//envoy/registry",
+    "//source/extensions/filters/http/common:factory_base_lib",
+    "//source/common/protobuf",
+    ":cachefilter_cc",
 	],
-    deps = [
-		"//envoy/http:filter_interface",
-		"//envoy/server:filter_config_interface",
-		"//envoy/registry",
-		"//source/common/protobuf",
-		"//external:protobuf",
-    ],
+	visibility = ["//visibility:public"],
 )
