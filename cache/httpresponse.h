@@ -1,5 +1,4 @@
-#ifndef HTTPRESPONSE_H
-#define HTTPRESPONSE_H
+#pragma once
 
 #include <string>
 
@@ -13,12 +12,9 @@ class HttpResponse {
 
 	public:
 		HttpResponse() : code(0) {}	
-		HttpResponse(std::string _url, std::string _host_header, std::string _body, int _code);
-		std::string generate_key();
+		HttpResponse(std::string _key, std::string _url, std::string _host_header, std::string _body, int _code);
 		std::string get_key();
 		std::string get_body();
 		int get_code();
 		bool is_valid();
 };
-
-#endif

@@ -4,14 +4,11 @@ load(
 	"envoy_extension_package",
 )
 
-licenses(["notice"])  # Apache 2
-
-# Needed to generate config_envoy_extension target
 envoy_extension_package()
 
 proto_library(
-    name = "cachefilter_proto",
-    srcs = ["cachefilter.proto"],
+	name = "cachefilter_proto",
+	srcs = ["cachefilter.proto"],
 )
 
 cc_proto_library(
@@ -19,26 +16,27 @@ cc_proto_library(
 	deps = [":cachefilter_proto"],
 )
 
-# All filter code goes inside envoy_cc_extension
 envoy_cc_extension(
 	name = "config",
 	srcs = glob([
 		"cachefilter.cc",
-		"cachefilter_factory.cc",
-		"cache/**/*.cpp",
+		"cachefilterconfig.cc",
+		"cachemanager.cc",
+		"cache/**/*.cc",
 	]),
 	hdrs = glob([
 		"cachefilter.h",
-		"cachefilter_factory.h",
+		"cachefilterconfig.h",
+		"cachemanager.h",
 		"cache/**/*.h",
 	]),
 	deps = [
-    "//envoy/http:filter_interface",
-    "//envoy/server:filter_config_interface",
-    "//envoy/registry",
-    "//source/extensions/filters/http/common:factory_base_lib",
-    "//source/common/protobuf",
-    ":cachefilter_cc",
+		"//envoy/http:filter_interface",
+		"//envoy/server:filter_config_interface",
+		"//envoy/registry",
+		"//source/extensions/filters/http/common:factory_base_lib",
+		"//source/common/protobuf",
+		":cachefilter_cc",
 	],
 	visibility = ["//visibility:public"],
 )

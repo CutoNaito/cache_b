@@ -1,30 +1,30 @@
-#ifndef CACHEFILTER_H
-#define CACHEFILTER_H
+#pragma once
 
-#include "envoy/http/filter.h"
-#include "envoy/http/header_map.h"
-#include "envoy/buffer/buffer.h"
 #include "absl/types/optional.h"
 #include "cache/cacheresponse.h"
+#include "cachemanager.h"
+#include "envoy/buffer/buffer.h"
+#include "envoy/http/filter.h"
+#include "envoy/http/header_map.h"
+#include "source/common/common/logger.h"
 
 namespace Envoy {
 namespace Extensions {
 namespace HttpFilters {
 namespace Cache_B {
 
-class CacheFilter : public Http::StreamFilter {
+class CacheFilter : public Http::StreamFilter, public Logger::Loggable<Logger::Id::filter> {
 	private:
-		CacheResponse& cache_;
+		CacheManager& manager_;
+		std::string current_key_;
+		InFlightRequest* in_flight_{nullptr};
 		bool should_cache_{false};
-		std::string response_body_;
-		int response_code_{0};
 
 		Http::StreamDecoderFilterCallbacks* decoder_callbacks_{};
 		Http::StreamEncoderFilterCallbacks* encoder_callbacks_{};
-		std::string current_key_;
 
 	public:
-		CacheFilter(CacheResponse& cache);
+		CacheFilter(CacheManager& manager);
 
 		Http::FilterHeadersStatus decodeHeaders(Http::RequestHeaderMap& headers, bool end_stream) override;
 		Http::FilterHeadersStatus encodeHeaders(Http::ResponseHeaderMap& headers, bool end_stream) override;
@@ -38,7 +38,7 @@ class CacheFilter : public Http::StreamFilter {
 		void setDecoderFilterCallbacks(Http::StreamDecoderFilterCallbacks& callbacks) override;
 		void setEncoderFilterCallbacks(Http::StreamEncoderFilterCallbacks& callbacks) override;
 
-		void onDestroy() override {};
+		void onDestroy() override;
 
 		Http::Filter1xxHeadersStatus encode1xxHeaders(Http::ResponseHeaderMap&) override {
 			return Http::Filter1xxHeadersStatus::Continue;
@@ -48,9 +48,8 @@ class CacheFilter : public Http::StreamFilter {
 			return Http::FilterMetadataStatus::Continue;
 		}
 };
-}
-}
-}
-}
 
-#endif
+}
+}
+}
+}

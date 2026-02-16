@@ -1,8 +1,8 @@
-#ifndef CACHERESPONSE_H
-#define CACHERESPONSE_H
+#pragma once
+
+#include <unordered_map>
 
 #include "ring.h"
-#include <unordered_map>
 
 class CacheResponse {
 	private:
@@ -16,5 +16,3 @@ class CacheResponse {
 		std::unordered_map<std::string, size_t> get_map();
 		RingBuffer get_ring();
 };
-
-#endif

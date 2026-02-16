@@ -1,7 +1,8 @@
-#include "ring.h"
-#include "httpresponse.h"
 #include <stdexcept>
 #include <utility>
+
+#include "httpresponse.h"
+#include "ring.h"
 
 using namespace std;
 

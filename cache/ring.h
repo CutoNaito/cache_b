@@ -1,8 +1,8 @@
-#ifndef RING_H
-#define RING_H
+#pragma once
 
 #include <string>
 #include <vector>
+
 #include "httpresponse.h"
 
 class RingBuffer {
@@ -23,5 +23,3 @@ class RingBuffer {
 		HttpResponse* peek(int index);
 		int size();
 };
-
-#endif

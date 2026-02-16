@@ -1,8 +1,9 @@
+#include <iostream>
+#include <unordered_map>
+
 #include "cacheresponse.h"
 #include "httpresponse.h"
 #include "ring.h"
-#include <iostream>
-#include <unordered_map>
 
 CacheResponse::CacheResponse(int _cap) : ring(_cap)
 {
@@ -20,11 +21,6 @@ void CacheResponse::insert(HttpResponse&& res)
 
 	HttpResponse* in = ring.peek(slot);
 	map[in->get_key()] = slot;
-
-	std::cout << "INSERT key=" << in->get_key()
-          << " slot=" << slot
-          << " map_size=" << map.size()
-          << "\n";
 }
 
 bool CacheResponse::lookup(std::string key, HttpResponse** out)
