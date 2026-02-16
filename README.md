@@ -16,6 +16,10 @@ Run Envoy with `bazel-bin/source/exe/envoy-static --config-path source/extension
 
 ## Resources
 
+https://www.envoyproxy.io/docs/envoy/v1.37.0/intro/arch_overview/http/http_filters.html
+
+https://www.envoyproxy.io/docs/envoy/v1.37.0/api/api
+
 https://deepwiki.com/envoyproxy/envoy-filter-example/5-http-filter-example
 
 https://github.com/envoyproxy/envoy-filter-example/tree/main/http-filter-example
