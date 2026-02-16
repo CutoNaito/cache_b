@@ -15,8 +15,7 @@ InFlightRequest* CacheManager::findInFlight(const std::string& key)
 
 	auto it = in_flight_.find(key);
 
-	if (it == in_flight_.end())
-	{
+	if (it == in_flight_.end()) {
 		return nullptr;
 	}
 
